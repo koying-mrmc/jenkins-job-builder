@@ -1,10 +1,14 @@
 builders:
   - nexus-artifact-uploader:
-      nexus_url: 'nexus.org'
-      group_id: 'com.example'
-      artifact_id: 'artifact'
-      version: '1.0'
-      packaging: 'pom'
-      type: 'zip'
-      repository: 'my-hosted-repo'
-      file: '/var/lib/jenkins/workspace/my_job/result.zip'
+       protocol: 'http'
+       nexus_version: 'nexus3'
+       nexus_url: 'nexus.org'
+       credentials_id: nexus_upload
+       group_id: 'com.example'
+       version: '1.0'
+       repository: 'maven-releases'
+       artifacts:
+          -
+             artifact_id: 'artifact'
+             extension: 'zip'
+             file: '/var/lib/jenkins/workspace/my_job/result.zip'

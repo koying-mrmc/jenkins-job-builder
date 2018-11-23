@@ -4222,27 +4222,25 @@ def nexus_artifact_uploader(registry, xml_parent, data):
     Requires the Jenkins :jenkins-plugins:`Nexus Artifact Uploader Plugin
     <nexus-artifact-uploader>`.
 
+    :arg str nexus_version: Nexus server version (default 'nexus3')
     :arg str protocol: Protocol to use to connect to Nexus (default https)
     :arg str nexus_url: Nexus url (without protocol) (default '')
-    :arg str nexus_user: Username to upload artifact to Nexus (default '')
-    :arg str nexus_password: Password to upload artifact to Nexus
-        (default '')
     :arg str group_id: GroupId to set for the artifact to upload
-        (default '')
-    :arg str artifact_id: ArtifactId to set for the artifact to upload
         (default '')
     :arg str version: Version to set for the artifact to upload
         (default '')
     :arg str packaging: Packaging to set for the artifact to upload
         (default '')
-    :arg str type: Type to set for the artifact to upload (default '')
-    :arg str classifier: Classifier to set for the artifact to upload
-        (default '')
     :arg str repository: In which repository to upload the artifact
         (default '')
-    :arg str file: File which will be the uploaded artifact (default '')
     :arg str credentials_id: Credentials to use (instead of password)
         (default '')
+
+        :Artifact:
+            * **artifact_id** (`str`) -- Artifact ID of the artifact (required)
+            * **classifier** (`str`) -- Classifier of the artifact (default '')
+            * **extension** (`str`) -- Extension of the artifact (default '')
+            * **file** (`str`) -- File to upload (default '')
 
     File Example:
 
@@ -4254,23 +4252,34 @@ def nexus_artifact_uploader(registry, xml_parent, data):
         xml_parent, "sp.sd.nexusartifactuploader.NexusArtifactUploader"
     )
     mapping = [
-        ("protocol", "protocol", "https"),
-        ("nexus_url", "nexusUrl", ""),
-        ("nexus_user", "nexusUser", ""),
-        ("nexus_password", "nexusPassword", ""),
-        ("group_id", "groupId", ""),
-        ("artifact_id", "artifactId", ""),
-        ("version", "version", ""),
-        ("packaging", "packaging", ""),
-        ("type", "type", ""),
-        ("classifier", "classifier", ""),
-        ("repository", "repository", ""),
-        ("file", "file", ""),
-        ("credentials_id", "credentialsId", ""),
+        ('nexus_version', 'nexusVersion', 'nexus3'),
+        ('protocol', 'protocol', 'https'),
+        ('nexus_version', 'nexusVersion', 'nexus2'),
+        ('nexus_url', 'nexusUrl', ''),
+        ('group_id', 'groupId', ''),
+        ('version', 'version', ''),
+        ('packaging', 'packaging', ''),
+        ('repository', 'repository', ''),
+        ('credentials_id', 'credentialsId', ''),
     ]
     helpers.convert_mapping_to_xml(
         nexus_artifact_uploader, data, mapping, fail_required=True
     )
+
+    artifact_top = XML.SubElement(nexus_artifact_uploader, 'artifacts')
+    artifacts = data['artifacts']
+    artifacts_mapping = [
+        ('artifact_id', 'artifactId', None),
+        ('classifier', 'classifier', ''),
+        ('extension', 'type', ''),
+        ('file', 'file', ''),
+    ]
+    for artifact in artifacts:
+        rcartifact = XML.SubElement(
+            artifact_top,
+            'sp.sd.nexusartifactuploader.Artifact')
+        helpers.convert_mapping_to_xml(
+            rcartifact, artifact, artifacts_mapping, fail_required=True)
 
 
 def nexus_iq_policy_evaluator(registry, xml_parent, data):
