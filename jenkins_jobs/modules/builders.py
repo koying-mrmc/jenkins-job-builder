@@ -1066,10 +1066,10 @@ def artifact_resolver(registry, xml_parent, data):
         ("target-directory", "targetDirectory", None),
         ("fail-on-error", "failOnError", False),
         ("repository-logging", "enableRepoLogging", False),
-        ("", "snapshotUpdatePolicy", "never"),
-        ("", "releaseUpdatePolicy", "never"),
-        ("", "snapshotChecksumPolicy", "warn"),
-        ("", "releaseChecksumPolicy", "warn"),
+        ("snapshot-update-policy", "snapshotUpdatePolicy", "never"),
+        ("release-update-policy", "releaseUpdatePolicy", "never"),
+        ("snapshot-checksum-policy", "snapshotChecksumPolicy", "warn"),
+        ("release-checksum-policy", "releaseChecksumPolicy", "warn"),
     ]
     helpers.convert_mapping_to_xml(ar, data, mapping, fail_required=True)
 
